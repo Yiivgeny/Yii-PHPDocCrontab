@@ -35,5 +35,5 @@ Add doc-comment for console actions
 LINKS
 -----
 
-Discussion (ru): http://www.yiiframework.ru/forum/viewtopic.php?f=9&t=5274
-Discussion (en): http://www.yiiframework.com/forum/index.php/topic/28948-installing-cron-jobs-by-phpdoc-comment-on-consolecommand-files/
+* Discussion (ru): http://www.yiiframework.ru/forum/viewtopic.php?f=9&t=5274
+* Discussion (en): http://www.yiiframework.com/forum/index.php/topic/28948-installing-cron-jobs-by-phpdoc-comment-on-consolecommand-files/
