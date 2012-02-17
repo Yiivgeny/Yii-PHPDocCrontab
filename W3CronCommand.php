@@ -251,14 +251,14 @@ RAW;
                 $stderr = isset($task['docs']['stderr'])?$task['docs']['stderr']:$stdout;
 
                 $this->runCommandBackground($command, $stdout, $stderr);
-                Yii::log('Running task ['.(++$runned).']: '.$task['command'].' '.$task['action'], CLogger::LEVEL_INFO, 'ext.w3lib.W3CronCommand');
+                Yii::log('Running task ['.(++$runned).']: '.$task['command'].' '.$task['action'], CLogger::LEVEL_INFO, 'ext.W3CronCommand');
             }
         }
         if ($runned > 0){
-                Yii::log('Runned '.$runned.' task(s) at '.date('r', $time), CLogger::LEVEL_INFO, 'ext.w3lib.W3CronCommand');
+                Yii::log('Runned '.$runned.' task(s) at '.date('r', $time), CLogger::LEVEL_INFO, 'ext.W3CronCommand');
         }
         else{
-                Yii::log('No task on '.date('r', $time), CLogger::LEVEL_INFO, 'ext.w3lib.W3CronCommand');
+                Yii::log('No task on '.date('r', $time), CLogger::LEVEL_INFO, 'ext.W3CronCommand');
         }
     }
 
