@@ -4,7 +4,7 @@
  *
  * @author Evgeny Blinov <e.a.blinov@gmail.com>
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @package W3CronCommand
+ * @package PHPDocCrontab
  * @subpackage example
  */
 
@@ -15,7 +15,7 @@
  */
 return array (
     'commandMap' => array(
-        'cron' => 'ext.W3CronCommand.W3CronCommand'
+        'cron' => 'ext.PHPDocCrontab.PHPDocCrontab'
     )
 );
 
@@ -27,7 +27,7 @@ return array (
 return array (
     'commandMap' => array(
         'cron' => array(
-            'class' => 'ext.W3CronCommand.W3CronCommand',
+            'class' => 'ext.PHPDocCrontab.PHPDocCrontab',
             /**
              * Префикс тегов при парсинге (по умолчанию cron)
              * Изменяя вы можете иные теги-задания, например

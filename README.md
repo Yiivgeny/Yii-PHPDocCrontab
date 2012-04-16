@@ -1,14 +1,14 @@
-Yii W3CronCommand extension
+Yii PHPDocCrontab extension
 ===========================
 
 INSTALLATION
 ------------
 
-Put directory W3CronCommand (or only W3CronCommand.php) into your framework extensions directory. 
-Add W3CronCommand.php as new console command on framework config:
+Put directory PHPDocCrontab (or only PHPDocCrontab.php) into your framework extensions directory. 
+Add PHPDocCrontab.php as new console command on framework config:
 
     'commandMap' => array(
-        'cron' => 'ext.W3CronCommand.W3CronCommand'
+        'cron' => 'ext.PHPDocCrontab.PHPDocCrontab'
     )
     
 Install cron job:

@@ -10,9 +10,9 @@
  * Класс-команда обрабатывающий запланированные задания.
  *
  * @author Evgeny Blinov <e.a.blinov@gmail.com>
- * @package W3CronCommand
+ * @package PHPDocCrontab
  */
-class W3CronCommand extends CConsoleCommand {
+class PHPDocCrontab extends CConsoleCommand {
 
     /**
      * @var string префикс для phpdoc-тегов используемый командой
@@ -251,14 +251,14 @@ RAW;
                 $stderr = isset($task['docs']['stderr'])?$task['docs']['stderr']:$stdout;
 
                 $this->runCommandBackground($command, $stdout, $stderr);
-                Yii::log('Running task ['.(++$runned).']: '.$task['command'].' '.$task['action'], CLogger::LEVEL_INFO, 'ext.W3CronCommand');
+                Yii::log('Running task ['.(++$runned).']: '.$task['command'].' '.$task['action'], CLogger::LEVEL_INFO, 'ext.'.__CLASS__);
             }
         }
         if ($runned > 0){
-                Yii::log('Runned '.$runned.' task(s) at '.date('r', $time), CLogger::LEVEL_INFO, 'ext.W3CronCommand');
+                Yii::log('Runned '.$runned.' task(s) at '.date('r', $time), CLogger::LEVEL_INFO, 'ext.'.__CLASS__);
         }
         else{
-                Yii::log('No task on '.date('r', $time), CLogger::LEVEL_INFO, 'ext.W3CronCommand');
+                Yii::log('No task on '.date('r', $time), CLogger::LEVEL_INFO, 'ext.'.__CLASS__);
         }
     }
 

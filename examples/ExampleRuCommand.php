@@ -4,14 +4,14 @@
  *
  * @author Evgeny Blinov <e.a.blinov@gmail.com>
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @package W3CronCommand
+ * @package PHPDocCrontab
  */
 
 /**
  * Класс команды-примера устновки заданий.
  *
  * @author Evgeny Blinov <e.a.blinov@gmail.com>
- * @package W3CronCommand
+ * @package PHPDocCrontab
  * @subpackage example
  */
 class ExampleRuCommand extends CConsoleCommand{
