@@ -1,13 +1,13 @@
 <?php
 /**
- * Расширение фреймворка Yii, позволяющее удобно управлять запуском консольных команд.
+ * Yii Framework extension. Better installing console commands as cron jobs.
  *
  * @author Evgeny Blinov <e.a.blinov@gmail.com>
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  */
 
 /**
- * Класс-команда обрабатывающий запланированные задания.
+ * PHPDocCrontab is a CConsoleCommand to automaticly running marked actions.
  *
  * @author Evgeny Blinov <e.a.blinov@gmail.com>
  * @package PHPDocCrontab
@@ -15,23 +15,23 @@
 class PHPDocCrontab extends CConsoleCommand {
 
     /**
-     * @var string префикс для phpdoc-тегов используемый командой
+     * @var string PHPDoc tag prefix for using by PHPDocCrontab extension. 
      */
     public $tagPrefix = 'cron';
     /**
-     * @var string путь к интерпретатору php (если пусто, путь определяется автоматически)
+     * @var string PHP interpriter path (if empty, path will be checked automaticly)
      */
     public $interpreterPath = null;
     /**
-     * @var string путь до директории содержащей логи запусков
+     * @var string path to writing logs
      */
     public $logsDir = null;
     /**
-     * @var string Путь до скрипта начальной загрузки
+     * @var string Bootstrap script path (if empty, current command runner will be used)
      */
     public $bootstrapScript = null;
     /**
-     * @var string Временная метка используемая в качестве текущего времени
+     * @var string Timestamp used as current datetime
      * @see http://php.net/manual/en/function.strtotime.php
      */
     public $timestamp = 'now';
@@ -41,11 +41,11 @@ class PHPDocCrontab extends CConsoleCommand {
     public $defaultAction = 'run';
 
     /**
-     * Метод инициализации параметров недостающих в конфигурации.
+     * Initialize empty config parameters.
      */
     public function init() {
         parent::init();
-        //Попытка определить путь до интерпретатора, если он не установлен вручную
+        //Checking PHP interpriter path
         if ($this->interpreterPath === null){
             if ($this->isWindowsOS()){
                 //Windows OS
@@ -56,11 +56,11 @@ class PHPDocCrontab extends CConsoleCommand {
                 $this->interpreterPath = '/usr/bin/env php';
             }
         }
-        //Установка папки для сохранения логов
+        //Checking logs directory
         if ($this->logsDir === null){
             $this->logsDir = Yii::app()->getRuntimePath();
         }
-        //Установка скрипта начальной загрузки
+        //Checking bootstrap script
         if ($this->bootstrapScript === null){
             $this->bootstrapScript = realpath($this->getCommandRunner()->getScriptName());
         }
@@ -95,7 +95,7 @@ RAW;
     }
 
     /**
-     * Приводит массив входных текстовых данных в массив частей дат.
+     * Transform string datetime expressions to array sets
      *
      * @param array $parameters
      * @return array
@@ -128,25 +128,24 @@ RAW;
     }
 
     /**
-     * Парсит DocComment в массив, выбирая только необходимые теги.
+     * Parsing and filtering PHPDoc comments.
      *
-     * @param string $comment Исходный комментарий
-     * @return array Список отфильтрованных тегов комментария
+     * @param string $comment Raw PHPDoc comment
+     * @return array List of valid tags
      */
     protected function parseDocComment($comment){
         if (empty($comment)) return array();
-        //Формирование маски тегов на основании $this->tagPrefix
+        //Forming pattern based on $this->tagPrefix
         $pattern = '#^\s*\*\s+@('.$this->tagPrefix.'(-(\w+))?)\s*(.*?)\s*$#im';
-        //Предполагается наличие тегов из списка:
+        //Miss tags:
         //cron, cron-tags, cron-args, cron-strout, cron-stderr
         if (preg_match_all($pattern, $comment, $matches, PREG_SET_ORDER)){
             foreach ($matches AS $match) $return[$match[3]?$match[3]:0] = $match[4];
 
             if (isset($return[0])){
-                //Текстовый вариант времени запуска команды
                 $return['_raw'] = preg_split('#\s+#', $return[0], 5);
                 $return[0] = $this->transformDatePieces($return['_raw']);
-                //Получение списка тегов и установка тега по умолчанию с случае отстутствия списка
+                //Getting tag list. If empty, string "default" will be used.
                 $return['tags'] = isset($return['tags'])?preg_split('#\W+#', $return['tags']):array('default');
                 return $return;
             }
@@ -154,9 +153,9 @@ RAW;
     }
 
     /**
-     * Получение списка заданий для возможного запуска.
+     * Getting tasklist.
      *
-     * @return array Список экшенов для возможного запуска
+     * @return array List of command actions associated with {@link PHPDocCrontab} runner.
      */
     protected function prepareActions(){
         $actions = array();
@@ -170,7 +169,7 @@ RAW;
             $Methods = $Reflection->getMethods(ReflectionMethod::IS_PUBLIC);
             foreach ($Methods AS $Method){
                 $name = $Method->getName();
-                //Фильтрация методов. Вывод только корректных консольных комманд.
+                //Filetring methods. Valid only public actions.
                 if(
                     !strncasecmp($name,'action',6) &&
                     strlen($name) > 6 &&
@@ -190,10 +189,11 @@ RAW;
     }
 
     /**
-     * ОС-независимый фоновый запуск консольной команды.
+     * OS-independent background command execution .
      *
-     * @param string $command Команда
-     * @param string $output Файл для вывода
+     * @param string $command
+     * @param string $stdout path to file for writing stdout
+     * @param string $stderr path to file for writing stderr
      */
     protected function runCommandBackground($command, $stdout, $stderr){
         $command =
@@ -213,22 +213,24 @@ RAW;
     }
 
     /**
-     * @return boolean Возвращает истину, если ОС семейства Windows
+     * Checking is windows family OS
+     * 
+     * @return boolean return true if script running under windows OS
      */
     protected function isWindowsOS(){
         return strncmp(PHP_OS, 'WIN', 3) === 0;
     }
 
     /**
-     * Команда запуска запланированных заданий.
+     * Running actions associated with {@link PHPDocCrontab} runner and matched with timestamp.
      *
-     * @param array $args Список тегов для экшенов которые будут запущены
+     * @param array $args List of run-tags to running actions (if empty, only "default" run-tag will be runned).
      */
     public function actionRun($args = array()){
         $tags = &$args;
         $tags[] = 'default';
 
-        //Получаем текущее время в необходимом формате
+        //Getting timestamp will be used as current
         $time = strtotime($this->timestamp);
         if ($time === false) throw new CException('Bad timestamp format');
         $now = explode(' ', date('i G j n w', $time));
@@ -236,15 +238,15 @@ RAW;
         foreach ($this->prepareActions() as $task) {
             if (array_intersect($tags, $task['docs']['tags'])){
                 foreach ($now AS $key => $piece){
-                    //Проверяем наличие текущей части даты в дате исполнения задания
+                    //Checking current datetime on timestamp piece array.
                     if (!in_array($piece, $task['docs'][0][$key])) continue 2;
                 }
 
-                //Формирование команды для запуска
+                //Forming command to run
                 $command = $this->bootstrapScript.' '.$task['command'].' '.$task['action'];
                 if (isset($task['docs']['args'])) $command .= ' '.escapeshellarg($task['docs']['args']);
 
-                //Установка stdout и stderr, если они не будут указаны
+                //Setting default stdout & stderr
                 $stdout = $this->logsDir.DIRECTORY_SEPARATOR.$task['command'].'.'.$task['action'].'.log';
 
                 if (isset($task['docs']['stdout'])) $stdout = $task['docs']['stdout'];
@@ -263,16 +265,16 @@ RAW;
     }
 
     /**
-     * Команда просмотра всех запланированных заданий.
+     * Show actions associated with {@link PHPDocCrontab} runner.
      *
-     * @param $args Список тегов интересующих заданий (оставить пустым для вывода всех возможных заданий)
+     * @param $args array List of run-tags for filtering action list (if empty, show all).
      */
     public function actionView($args = array()){
         $tags = &$args;
 
         foreach ($this->prepareActions() as $task) {
             if (!$tags || array_intersect($tags, $task['docs']['tags'])){
-                //Формирование аргументов для функции printf
+                //Forming to using with printf function
                 $times = $task['docs']['_raw'];
                 array_unshift($times, $task['command'].'.'.$task['action']);
                 array_unshift($times, "Action %-40s on %6s %6s %6s %6s %6s %s\n");
@@ -283,7 +285,7 @@ RAW;
     }
 
     /**
-     * Команда показывающая справку по использованию расширения.
+     * Help command. Show command usage.
      */
     public function actionHelp(){
        echo $this->getHelp();
