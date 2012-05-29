@@ -22,7 +22,7 @@ class ExampleRuCommand extends CConsoleCommand{
      *
      * @cron 10 * * * *
      */
-    public function actionExapmle1(){}
+    public function actionexample1(){}
 
     /**
      * Пример тегирования.
@@ -32,7 +32,7 @@ class ExampleRuCommand extends CConsoleCommand{
      * @cron 10 * * * *
      * @cron-tags dbserver cacheserver
      */
-    public function actionExapmle2(){}
+    public function actionexample2(){}
 
     /**
      * Пример перенаправления STDOUT и STDERR в один и тот же файл.
@@ -40,7 +40,7 @@ class ExampleRuCommand extends CConsoleCommand{
      * @cron 10 * * * *
      * @cron-stdout /tmp/ExampleCommand.log
      */
-    public function actionExapmle3(){}
+    public function actionexample3(){}
 
     /**
      * Пример перенаправления STDOUT и STDERR в разные файлы.
@@ -49,7 +49,7 @@ class ExampleRuCommand extends CConsoleCommand{
      * @cron-stdout /tmp/ExampleCommand.log
      * @cron-stderr /tmp/ExampleCommandError.log
      */
-    public function actionExapmle4(){}
+    public function actionexample4(){}
 
     /**
      * Пример перенаправления STDERR в файл (STDOUT выводится в файл по умолчанию).
@@ -57,7 +57,7 @@ class ExampleRuCommand extends CConsoleCommand{
      * @cron 10 * * * *
      * @cron-stderr /dev/null
      */
-    public function actionExapmle5(){}
+    public function actionexample5(){}
 
     /**
      * Пример команды с аргументами.
@@ -66,7 +66,7 @@ class ExampleRuCommand extends CConsoleCommand{
      * @cron 10 * * * *
      * @cron-args --limit=5 --offset=10
      */
-    public function actionExapmle6($limit, $offset){}
+    public function actionexample6($limit, $offset){}
 
     /**
      * Пример расширенного использования времени запуска.
@@ -79,7 +79,7 @@ class ExampleRuCommand extends CConsoleCommand{
      *
      * @cron 10,25-30,40 *\2 15-21,23-27 1-6\2 *
      */
-    public function actionExapmle7(){}
+    public function actionexample7(){}
 
     /**
      * Все описанные конструкции могут использоваться совместно и в любом порядке.
@@ -90,5 +90,5 @@ class ExampleRuCommand extends CConsoleCommand{
      * @cron-tags dbserver cacheserver
      * @cron-stdout /tmp/ExampleCommand.log
      */
-    public function actionExapmle8($limit, $offset){}
+    public function actionexample8($limit, $offset){}
 }
