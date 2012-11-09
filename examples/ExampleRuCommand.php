@@ -36,9 +36,15 @@ class ExampleRuCommand extends CConsoleCommand{
 
     /**
      * Пример перенаправления STDOUT и STDERR в один и тот же файл.
+     * Параметры stdout и stderr могут быть маской, включающей следующие варианты замены:
+     *     %L - содержимое свойства logsDir
+     *     %C - имя исполняемой команды
+     *     %A - имя действия исполняемой команды
+     *     %P - PID запускающего скрипта
+     *     %D(format) - вывод даты в формате format; синтаксис повторяет используемый функций date()
      *
      * @cron 10 * * * *
-     * @cron-stdout /tmp/ExampleCommand.log
+     * @cron-stdout /tmp/Example_%C.%A.log
      */
     public function actionexample3(){}
 

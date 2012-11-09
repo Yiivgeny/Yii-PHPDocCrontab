@@ -15,7 +15,7 @@
 class PHPDocCrontab extends CConsoleCommand {
 
     /**
-     * @var string PHPDoc tag prefix for using by PHPDocCrontab extension. 
+     * @var string PHPDoc tag prefix for using by PHPDocCrontab extension.
      */
     public $tagPrefix = 'cron';
     /**
@@ -26,6 +26,16 @@ class PHPDocCrontab extends CConsoleCommand {
      * @var string path to writing logs
      */
     public $logsDir = null;
+    /**
+     * Placeholders:
+     *     %L - logsDir path
+     *     %C - name of command
+     *     %A - name of action
+     *     %P - pid of runner-script (current)
+     *     %D(string formatted as arg of date() function) - formatted date
+     * @var string mask log file name
+     */
+    public $logFileName = '%L/%C.%A.log';
     /**
      * @var string Bootstrap script path (if empty, current command runner will be used)
      */
@@ -87,6 +97,7 @@ Options:
     [--tagPrefix=value]
     [--interpreterPath=value]
     [--logsDir=value]
+    [--logFileName=value]
     [--bootstrapScript=value]
     [--timestamp=value]
 
@@ -214,7 +225,7 @@ RAW;
 
     /**
      * Checking is windows family OS
-     * 
+     *
      * @return boolean return true if script running under windows OS
      */
     protected function isWindowsOS(){
@@ -247,10 +258,11 @@ RAW;
                 if (isset($task['docs']['args'])) $command .= ' '.escapeshellarg($task['docs']['args']);
 
                 //Setting default stdout & stderr
-                $stdout = $this->logsDir.DIRECTORY_SEPARATOR.$task['command'].'.'.$task['action'].'.log';
-
                 if (isset($task['docs']['stdout'])) $stdout = $task['docs']['stdout'];
-                $stderr = isset($task['docs']['stderr'])?$task['docs']['stderr']:$stdout;
+                else                                $stdout = $this->logFileName;
+
+                $stdout = $this->formatFileName($stdout, $task);
+                $stderr = isset($task['docs']['stderr'])?$this->formatFileName($task['docs']['stderr'], $task):$stdout;
 
                 $this->runCommandBackground($command, $stdout, $stderr);
                 Yii::log('Running task ['.(++$runned).']: '.$task['command'].' '.$task['action'], CLogger::LEVEL_INFO, 'ext.'.__CLASS__);
@@ -282,6 +294,15 @@ RAW;
                 call_user_func_array('printf', $times);
             }
         }
+    }
+
+    protected function formatFileName($pattern, $task){
+        $pattern = str_replace(
+            array('%L', '%C', '%A', '%P'),
+            array($this->logsDir, $task['command'], $task['action'], getmypid()),
+            $pattern
+        );
+        return preg_replace_callback('#%D\((.+)\)#U', create_function('$str', 'return date($str[1]);'), $pattern);
     }
 
     /**
