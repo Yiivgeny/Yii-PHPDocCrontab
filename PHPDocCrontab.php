@@ -255,7 +255,7 @@ RAW;
 
                 //Forming command to run
                 $command = $this->bootstrapScript.' '.$task['command'].' '.$task['action'];
-                if (isset($task['docs']['args'])) $command .= ' '.escapeshellarg($task['docs']['args']);
+                if (isset($task['docs']['args'])) $command .= ' '.escapeshellcmd($task['docs']['args']);
 
                 //Setting default stdout & stderr
                 if (isset($task['docs']['stdout'])) $stdout = $task['docs']['stdout'];
