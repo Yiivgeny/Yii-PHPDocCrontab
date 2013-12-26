@@ -39,5 +39,6 @@ class TestCommand extends CConsoleCommand{
 
 ##Resources
 - [More examples on GitHub](https://github.com/Yiivgeny/Yii-PHPDocCrontab/blob/master/examples/ExampleRuCommand.php)
+- [Extension page on YiiFramework Site](http://www.yiiframework.com/extension/phpdoc-crontab)
 - [Discussion on YiiFramework Forum](http://www.yiiframework.com/forum/index.php/topic/28948-installing-cron-jobs-by-phpdoc-comment-on-consolecommand-files/)
 - [Discussion on Russian YiiFramework Forum](http://www.yiiframework.ru/forum/viewtopic.php?f=9&t=5274)
