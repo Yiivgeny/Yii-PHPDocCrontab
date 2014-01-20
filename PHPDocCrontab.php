@@ -119,20 +119,22 @@ RAW;
             array(1,12), //Months
             array(0,6),  //Weekdays
         );
-        foreach ($parameters AS $n => &$repeat) {
-            list($repeat, $every) = explode('\\', $repeat, 2) + array(false, 1);
-            if ($repeat === '*') $repeat = range($dimensions[$n][0], $dimensions[$n][1]);
-            else {
-                $repeatPiece = array();
-                foreach (explode(',', $repeat) as $piece) {
+        foreach ($parameters AS $n => $repeat) {
+            $parameters[$n] = array();
+            foreach (explode(',', $repeat) as $piece) {
+                $piecesStorage = array();
+                list($piece, $every) = explode('\\', $piece, 2) + array(false, 1);
+
+                if ($piece === '*') $piecesStorage = range($dimensions[$n][0], $dimensions[$n][1]);
+                else {
                     $piece = explode('-', $piece, 2);
-                    if (count($piece) === 2) $repeatPiece = array_merge($repeatPiece, range($piece[0], $piece[1]));
-                    else                     $repeatPiece[] = $piece[0];
+                    if (count($piece) === 2) $piecesStorage = range($piece[0], $piece[1]);
+                    else                     $piecesStorage = array((int)$piece[0]);
                 }
-                $repeat = $repeatPiece;
-            }
-            if ($every > 1) foreach ($repeat AS $key => $piece){
-                if ($piece%$every !== 0) unset($repeat[$key]);
+                if ($every > 1) foreach ($piecesStorage AS $key => $element){
+                    if ($element%$every !== 0) unset($piecesStorage[$key]);
+                }
+                $parameters[$n] = array_merge($parameters[$n], $piecesStorage);
             }
         }
         return $parameters;
@@ -196,6 +198,7 @@ RAW;
                 }
             }
         }
+        var_dump($actions);
         return $actions;
     }
 
