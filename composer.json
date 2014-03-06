@@ -1,0 +1,18 @@
+{
+    "name": "yiivgeny/yii-phpdoc-crontab",
+    "description": "Simple and convenient installing console commands as cron jobs for Yii framework",
+    "keywords": ["yii", "cron", "crontab", "schedule"],
+    "homepage": "http://www.yiiframework.com/extension/phpdoc-crontab",
+    "type": "yii-extension",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Evgeny Blinov",
+            "email": "e.a.blinov@gmail.com"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/Yiivgeny/Yii-PHPDocCrontab/issues",
+        "source": "https://github.com/Yiivgeny/Yii-PHPDocCrontab"
+    }
+}
