@@ -198,7 +198,6 @@ RAW;
                 }
             }
         }
-        var_dump($actions);
         return $actions;
     }
 
